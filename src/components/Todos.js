@@ -32,9 +32,11 @@ const initialTodos = [
   }
 ]
 
+
 const Todos = () => {
   const [todos, setTodos] = useState(JSON.parse(localStorage.getItem('todos')) || initialTodos)
   const [filter, setFilter] = useState("all")
+  const [darkMode,setDarkMode]= useState(false)
 
   const addTodo = (text) => {
     const newTodo = {
@@ -74,17 +76,33 @@ const Todos = () => {
   
   const completedCount = todos.filter((el) => el.isCompleted).length
 
+  const handleChange = () => {
+    setDarkMode(!darkMode)
+  }
+ 
+  
 
   useEffect(() =>{
     document.title = completedCount === todos.length ? `Que devez vous faire aujourd'hui ?` : ` Vous avez ${todos.length - completedCount} tâches à accomplir !`
   },[todos,completedCount])
 
   useEffect(()=>{
+    darkMode ? document.body.className = "bg-dark text-light" : document.body.className = "bg-light text-dark"
+  },[darkMode])
+
+  useEffect(()=>{
     localStorage.setItem("todos",JSON.stringify(todos))
   },[todos])
-  console.log(JSON.parse(localStorage.getItem('todos')))
+   useEffect(()=>{
+    localStorage.setItem("darkmode",JSON.stringify(darkMode))
+  },[])
+
   return (
     <main>
+      <div className="form-check form-switch">
+        <input className="form-check-input" type="checkbox" id="activate" onChange = {handleChange} />
+        <label className="form-check-label" htmlFor="activate" > Mode Sombre </label>
+      </div>
       <h2 className="text-center">
         Ma liste de tâches ({completedCount} / {todos.length})
       </h2>
