@@ -36,8 +36,8 @@ const initialTodos = [
 const Todos = () => {
   const [todos, setTodos] = useState(JSON.parse(localStorage.getItem('todos')) || initialTodos)
   const [filter, setFilter] = useState("all")
-  const [darkMode,setDarkMode]= useState(false)
-
+  const [darkMode,setDarkMode]= useState(JSON.parse(localStorage.getItem('darkMode')) || false)
+  
   const addTodo = (text) => {
     const newTodo = {
       text,
@@ -94,13 +94,15 @@ const Todos = () => {
     localStorage.setItem("todos",JSON.stringify(todos))
   },[todos])
    useEffect(()=>{
-    localStorage.setItem("darkmode",JSON.stringify(darkMode))
-  },[])
+    localStorage.setItem("darkMode",JSON.stringify(darkMode))
+  },[darkMode])
 
   return (
     <main>
       <div className="form-check form-switch">
-        <input className="form-check-input" type="checkbox" id="activate" onChange = {handleChange} />
+        {darkMode ? <input className="form-check-input" type="checkbox" id="activate" onChange = {handleChange} checked/> 
+          :
+        <input className="form-check-input" type="checkbox" id="activate" onChange = {handleChange}/>  }
         <label className="form-check-label" htmlFor="activate" > Mode Sombre </label>
       </div>
       <h2 className="text-center">
